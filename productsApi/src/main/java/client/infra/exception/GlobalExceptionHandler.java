@@ -1,5 +1,6 @@
 package client.infra.exception;
 
+import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -37,6 +38,16 @@ public class GlobalExceptionHandler {
         response.setProperty("erros", errors);
         response.setInstance(instance);
 
-        return ResponseEntity.status(status).body(response);
+        return ResponseEntity
+                .status(status)
+                .body(response);
+    }
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<String> handleFeignException(FeignException e) {
+
+        return ResponseEntity
+                .status(e.status())
+                .body(e.contentUTF8());
     }
 }
