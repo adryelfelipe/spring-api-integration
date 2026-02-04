@@ -1,4 +1,4 @@
-package client.domain.models;
+package client.model;
 
 public class Client {
     // Atributos
