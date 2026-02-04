@@ -1,6 +1,8 @@
 package client.controller;
 
 import client.dto.create.CreateClientRequest;
+import client.dto.get.GetClientRequest;
+import client.dto.get.GetClientResponse;
 import client.service.ClientAppService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,10 +23,17 @@ public class ClientController {
     // Métodos
     @PostMapping()
     public ResponseEntity<Void> create(@RequestBody @Valid CreateClientRequest request) {
-        clientAppService.create();
+        clientAppService.create(request);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GetClientResponse> getById(GetClientRequest request) {
+        GetClientResponse response = clientAppService.get(request);
+
+        return ResponseEntity.ok(response);
     }
 }
