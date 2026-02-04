@@ -1,6 +1,5 @@
-package client.infra.exception;
+package product.infra.exception;
 
-import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -19,26 +18,10 @@ import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ProblemDetail> handleException(HttpServletRequest httpRequest) throws URISyntaxException {
-        URI type = new URI("http://localhost:8080/errors/generic-exception");
-        URI instance = new URI(httpRequest.getRequestURI());
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-
-        ProblemDetail problemDetail = ProblemDetail.forStatus(status);
-        problemDetail.setType(type);
-        problemDetail.setTitle("Generic exception");
-        problemDetail.setInstance(instance);
-
-        return ResponseEntity
-                .status(status)
-                .body(problemDetail);
-    }
-
+    // Métodos
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ProblemDetail> handleHttpMessageNotReadableException(HttpServletRequest httpRequest) throws URISyntaxException {
-        URI type = new URI("http://localhost:8080/errors/empty-body");
+        URI type = new URI("http://localhost:8081/errors/empty-body");
         URI instance = new URI(httpRequest.getRequestURI());
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
@@ -53,9 +36,24 @@ public class GlobalExceptionHandler {
                 .body(problemDetail);
     }
 
+    public ResponseEntity<ProblemDetail> handleException(HttpServletRequest httpRequest) throws URISyntaxException {
+        URI type = new URI("http://localhost:8081/errors/generic-exception");
+        URI instance = new URI(httpRequest.getRequestURI());
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        ProblemDetail problemDetail = ProblemDetail.forStatus(status);
+        problemDetail.setType(type);
+        problemDetail.setTitle("Generic exception");
+        problemDetail.setInstance(instance);
+
+        return ResponseEntity
+                .status(status)
+                .body(problemDetail);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ProblemDetail> handleMethodArgumentNotValiException(MethodArgumentNotValidException e, HttpServletRequest httpRequest) throws URISyntaxException {
-        URI type = new URI("http://localhost:8080/errors/invalid-output");
+        URI type = new URI("http://localhost:8081/errors/invalid-output");
         URI instance = new URI(httpRequest.getRequestURI());
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
@@ -75,13 +73,5 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(status)
                 .body(response);
-    }
-
-    @ExceptionHandler(FeignException.class)
-    public ResponseEntity<String> handleFeignException(FeignException e) {
-
-        return ResponseEntity
-                .status(e.status())
-                .body(e.contentUTF8());
     }
 }
