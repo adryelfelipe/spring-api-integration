@@ -4,12 +4,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public record GetClientResponse(
-         @NotBlank
-         String name,
+        @NotBlank(message = "O nome é obrigatório")
+        String name,
 
-         @Email
-         @NotBlank
-         String email,
-
-         long id
+        @NotBlank(message = "O email é obrigatório")
+        @Email(message = "O email está inválido")
+        String email
 ) {}
