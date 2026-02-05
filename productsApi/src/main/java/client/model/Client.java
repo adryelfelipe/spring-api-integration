@@ -28,9 +28,10 @@ public class Client {
     public Client() {
     }
 
-    public Client(String name, String email) {
+    public Client(String name, String email, Long id) {
         this.name = name;
         this.email = email;
+        this.id = id;
     }
 
     // Getters e Setters
