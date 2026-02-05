@@ -6,11 +6,13 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 public record CreateProductRequest(
-        @NotBlank
-        @Size(min = 1)
+        @NotBlank(message = "O nome do produto é obrigatório")
+        @Size(min = 1, message = "O nome do produto deve ter no mínimo 1 caracter")
         String name,
 
-        @Positive long id,
+        @PositiveOrZero(message = "O id do produto deve ser maior ou igual a 0")
+        long id,
 
-        @PositiveOrZero double price
+        @PositiveOrZero(message = "O preço do produto deve ser maior ou igual a 0")
+        double price
 ) {}
