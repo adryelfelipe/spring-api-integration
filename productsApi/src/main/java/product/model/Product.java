@@ -31,11 +31,11 @@ public class Product {
     )
     private Client client;
 
-
+    // Construtor vazio para JPA
     public Product() {
     }
 
-
+    // Construtor
     public Product(String name, Double price, Client client) {
         this.name = name;
         this.price = price;

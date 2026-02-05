@@ -6,7 +6,7 @@ import client.dto.get.GetClientResponse;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ClientAppService {
+public class ClientService {
 
     // Métodos
     public void create(CreateClientRequest request) {
