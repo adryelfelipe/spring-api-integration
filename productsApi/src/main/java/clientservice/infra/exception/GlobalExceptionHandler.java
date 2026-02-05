@@ -1,19 +1,7 @@
-<<<<<<< HEAD
 package clientservice.infra.exception;
 
 import clientservice.Auth.exception.AccessDeniedException;
 import clientservice.Client.exception.ClientException;
-=======
-<<<<<<<< HEAD:productsApi/src/main/java/productservice/infra/exception/GlobalExceptionHandler.java
-package productservice.infra.exception;
-
-import clientservice.Auth.exception.AccessDeniedException;
-========
-package clientservice.infra.exception;
-
-import clientservice.Client.exception.ClientException;
->>>>>>>> 56bcd452db047ecf3366af2df8f774fdba689bc7:productsApi/src/main/java/clientservice/infra/exception/GlobalExceptionHandler.java
->>>>>>> 56bcd452db047ecf3366af2df8f774fdba689bc7
 import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -37,20 +25,13 @@ import java.util.List;
 public class GlobalExceptionHandler {
     // Atributos
     private Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-<<<<<<< HEAD
 
     // Handlers
-=======
-<<<<<<<< HEAD:productsApi/src/main/java/productservice/infra/exception/GlobalExceptionHandler.java
-
-    // Métodos
->>>>>>> 56bcd452db047ecf3366af2df8f774fdba689bc7
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ProblemDetail> handleAcessDeniedException(AccessDeniedException e, HttpServletRequest httpRequest) throws URISyntaxException {
         logger.warn("Acesso negado");
 
         URI type = new URI("http://localhost:8080/errors/acess-denied");
-<<<<<<< HEAD
         URI instance = new URI(httpRequest.getRequestURI());
         HttpStatus status = HttpStatus.FORBIDDEN;
 
@@ -66,33 +47,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ClientException.class)
-    public ResponseEntity<ProblemDetail> handleClientException(ClientException e, HttpServletRequest httpRequest) throws URISyntaxException {
-        logger.warn("Regra de negócio violada");
-
-        URI type = new URI("http://localhost:8080/errors/client-exception");
-        URI instance = new URI(httpRequest.getRequestURI());
-=======
-========
-
-    // Handlers
-    @ExceptionHandler(ClientException.class)
     public ResponseEntity<ProblemDetail> handleClientException(ClientException e, HttpServletRequest request) throws URISyntaxException {
-        logger.warn("Regra de negócio violada");
+        logger.warn("Regra de negocio violada");
 
         URI type = new URI("http://localhost:8080/errors/client-exception");
         URI instance = new URI(request.getRequestURI());
->>>>>>> 56bcd452db047ecf3366af2df8f774fdba689bc7
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
         ProblemDetail problemDetail = ProblemDetail.forStatus(status);
         problemDetail.setType(type);
-<<<<<<< HEAD
-        problemDetail.setTitle("Regra de negócio violada");
-        problemDetail.setDetail(e.getMessage());
-=======
         problemDetail.setTitle("Regras de negócio violadas");
-        problemDetail.setDetail("As regras de negócio do módulo Cliente foram violadas");
->>>>>>> 56bcd452db047ecf3366af2df8f774fdba689bc7
+        problemDetail.setDetail(e.getMessage());
         problemDetail.setInstance(instance);;
 
         return ResponseEntity
@@ -102,49 +67,26 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> handleException(Exception e, HttpServletRequest httpRequest) throws URISyntaxException {
-        logger.error("Exceção inesperada: " + e);
+        logger.error("Excecao inesperada: " + e);
 
         URI type = new URI("http://localhost:8080/errors/generic-exception");
-<<<<<<< HEAD
         URI instance = new URI(httpRequest.getRequestURI());
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
         ProblemDetail problemDetail = ProblemDetail.forStatus(status);
         problemDetail.setType(type);
+        problemDetail.setTitle("Generic exception");
         problemDetail.setTitle("Exceção genérica");
         problemDetail.setInstance(instance);
-=======
->>>>>>>> 56bcd452db047ecf3366af2df8f774fdba689bc7:productsApi/src/main/java/clientservice/infra/exception/GlobalExceptionHandler.java
-        URI instance = new URI(httpRequest.getRequestURI());
-        HttpStatus status = HttpStatus.FORBIDDEN;
-
-        ProblemDetail problemDetail = ProblemDetail.forStatus(status);
-        problemDetail.setType(type);
-<<<<<<<< HEAD:productsApi/src/main/java/productservice/infra/exception/GlobalExceptionHandler.java
-        problemDetail.setTitle("Regra de autorização violada");
-        problemDetail.setDetail("Você não tem permissão para executar esta ação");
-        problemDetail.setInstance(instance);;
-========
-        problemDetail.setTitle("Exceção genérica");
-        problemDetail.setInstance(instance);
->>>>>>>> 56bcd452db047ecf3366af2df8f774fdba689bc7:productsApi/src/main/java/clientservice/infra/exception/GlobalExceptionHandler.java
->>>>>>> 56bcd452db047ecf3366af2df8f774fdba689bc7
 
         return ResponseEntity
                 .status(status)
                 .body(problemDetail);
     }
 
-<<<<<<< HEAD
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ProblemDetail> handleHttpMessageNotReadableException(HttpServletRequest httpRequest) throws URISyntaxException {
+    public ResponseEntity<ProblemDetail> handleHttpMessageNotReadableException (HttpServletRequest httpRequest) throws URISyntaxException {
         URI type = new URI("http://localhost:8080/errors/empty-body");
-=======
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ProblemDetail> handleHttpMessageNotReadableException(HttpServletRequest httpRequest) throws URISyntaxException {
-        URI type = new URI("http://localhost:8081/errors/empty-body");
->>>>>>> 56bcd452db047ecf3366af2df8f774fdba689bc7
         URI instance = new URI(httpRequest.getRequestURI());
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
@@ -157,59 +99,37 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(status)
                 .body(problemDetail);
-    }
-
-<<<<<<< HEAD
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ProblemDetail> handleMethodArgumentNotValiException(MethodArgumentNotValidException e, HttpServletRequest httpRequest) throws URISyntaxException {
-        URI type = new URI("http://localhost:8080/errors/invalid-output");
-=======
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ProblemDetail> handleException(HttpServletRequest httpRequest) throws URISyntaxException {
-        URI type = new URI("http://localhost:8081/errors/generic-exception");
-        URI instance = new URI(httpRequest.getRequestURI());
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-
-        ProblemDetail problemDetail = ProblemDetail.forStatus(status);
-        problemDetail.setType(type);
-        problemDetail.setTitle("Generic exception");
-        problemDetail.setInstance(instance);
-
-        return ResponseEntity
-                .status(status)
-                .body(problemDetail);
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ProblemDetail> handleMethodArgumentNotValiException(MethodArgumentNotValidException e, HttpServletRequest httpRequest) throws URISyntaxException {
-        URI type = new URI("http://localhost:8081/errors/invalid-output");
->>>>>>> 56bcd452db047ecf3366af2df8f774fdba689bc7
-        URI instance = new URI(httpRequest.getRequestURI());
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-
-        BindingResult result = e.getBindingResult();
-        List<String> errors = new ArrayList<>();
-        for(FieldError fieldError : result.getFieldErrors()) {
-            errors.add("campo: " + fieldError.getField() + " | mensagem: " + fieldError.getDefaultMessage());
         }
 
-        ProblemDetail response = ProblemDetail.forStatus(status);
-        response.setType(type);
-        response.setTitle("Requisição inválida");
-        response.setDetail("A requisição contém campos inválidos ou obrigatórios ausentes");
-        response.setProperty("erros", errors);
-        response.setInstance(instance);
+        @ExceptionHandler(MethodArgumentNotValidException.class)
+        public ResponseEntity<ProblemDetail> handleMethodArgumentNotValidException (MethodArgumentNotValidException e, HttpServletRequest httpRequest) throws URISyntaxException {
+            URI type = new URI("http://localhost:8080/errors/invalid-output");
+            URI instance = new URI(httpRequest.getRequestURI());
+            HttpStatus status = HttpStatus.BAD_REQUEST;
 
-        return ResponseEntity
-                .status(status)
-                .body(response);
+            BindingResult result = e.getBindingResult();
+            List<String> errors = new ArrayList<>();
+            for (FieldError fieldError : result.getFieldErrors()) {
+                errors.add("campo: " + fieldError.getField() + " | mensagem: " + fieldError.getDefaultMessage());
+            }
+
+            ProblemDetail response = ProblemDetail.forStatus(status);
+            response.setType(type);
+            response.setTitle("Requisição inválida");
+            response.setDetail("A requisição contém campos inválidos ou obrigatórios ausentes");
+            response.setProperty("erros", errors);
+            response.setInstance(instance);
+
+            return ResponseEntity
+                    .status(status)
+                    .body(response);
+        }
+
+        @ExceptionHandler(FeignException.class)
+        public ResponseEntity<String> handleFeignException (FeignException e){
+
+            return ResponseEntity
+                    .status(e.status())
+                    .body(e.contentUTF8());
+        }
     }
-
-    @ExceptionHandler(FeignException.class)
-    public ResponseEntity<String> handleFeignException(FeignException e) {
-
-        return ResponseEntity
-                .status(e.status())
-                .body(e.contentUTF8());
-    }
-}

@@ -1,7 +1,10 @@
 package clientservice.Auth.service;
 
-import clientservice.Auth.dto.login.LoginRequest;
+import clientservice.Auth.dto.login.ClientLoginRequest;
+import clientservice.Auth.dto.register.ClientRegisterRequest;
+import clientservice.Client.exception.ClientEmailAlreadyUsed;
 import clientservice.Client.exception.ClientNotFoundException;
+import clientservice.Client.mapper.ClientMapper;
 import clientservice.infra.repository.ClientRepository;
 import clientservice.infra.session.ClientSession;
 import clientservice.Client.model.Client;
@@ -14,16 +17,17 @@ public class AuthService {
     // Atributos
     private ClientSession clientSession;
     private ClientRepository clientRepository;
+    private ClientMapper clientMapper;
 
     // Construtor
-    public AuthService(ClientSession clientSession, ClientRepository clientRepository) {
+    public AuthService(ClientSession clientSession, ClientRepository clientRepository, ClientMapper clientMapper) {
         this.clientSession = clientSession;
         this.clientRepository = clientRepository;
+        this.clientMapper = clientMapper;
     }
 
     // Métodos
-    public void login(LoginRequest request) {
-        // implementar validação
+    public void login(ClientLoginRequest request) {
         Optional<Client> optionalClient = clientRepository.getByEmail(request.email());
 
         if(optionalClient.isEmpty()) {
@@ -36,5 +40,16 @@ public class AuthService {
             clientSession.setId(client.getId());
             clientSession.setName(client.getName());
         }
+    }
+
+    public void register(ClientRegisterRequest request) {
+        Optional<Client> optionalClient = clientRepository.getByEmail(request.email());
+
+        if(optionalClient.isPresent()) {
+            throw new ClientEmailAlreadyUsed(request.email());
+        }
+
+        Client client = clientMapper.toEntity(request);
+        clientRepository.save(client);
     }
 }

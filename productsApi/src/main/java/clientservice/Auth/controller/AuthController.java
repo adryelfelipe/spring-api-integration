@@ -1,13 +1,12 @@
 package clientservice.Auth.controller;
 
-import clientservice.Auth.dto.login.LoginRequest;
+import clientservice.Auth.dto.login.ClientLoginRequest;
+import clientservice.Auth.dto.register.ClientRegisterRequest;
 import clientservice.Auth.service.AuthService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -22,9 +21,18 @@ public class AuthController {
 
     // Métodos
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<Void> login(@RequestBody @Valid ClientLoginRequest request) {
         authService.login(request);
 
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Void> register(@RequestBody @Valid ClientRegisterRequest request) {
+        authService.register(request);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .build();
     }
 }

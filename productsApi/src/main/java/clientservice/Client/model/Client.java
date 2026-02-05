@@ -32,8 +32,9 @@ public class Client {
     public Client() {
     }
 
-    public Client(String name, String email, Long id) {
+    public Client(String name,String password ,String email, Long id) {
         this.name = name;
+        this.password = password;
         this.email = email;
         this.id = id;
     }
