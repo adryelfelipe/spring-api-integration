@@ -36,6 +36,7 @@ public class GlobalExceptionHandler {
                 .body(problemDetail);
     }
 
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> handleException(HttpServletRequest httpRequest) throws URISyntaxException {
         URI type = new URI("http://localhost:8081/errors/generic-exception");
         URI instance = new URI(httpRequest.getRequestURI());

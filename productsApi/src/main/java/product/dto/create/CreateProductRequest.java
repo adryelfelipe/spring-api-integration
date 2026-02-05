@@ -1,4 +1,4 @@
-package product.dto;
+package product.dto.create;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
