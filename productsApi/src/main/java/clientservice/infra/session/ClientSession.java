@@ -3,6 +3,8 @@ package clientservice.infra.session;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
+import java.util.Optional;
+
 @Component
 @SessionScope
 public class ClientSession {
@@ -11,16 +13,16 @@ public class ClientSession {
     private Long id;
 
     // Getters and Setters
-    public Long getId() {
-        return id;
+    public Optional<Long> getId() {
+        return Optional.ofNullable(id);
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Optional<String> getName() {
+        return Optional.ofNullable(name);
     }
 
     public void setName(String name) {

@@ -1,13 +1,13 @@
-package product.controller;
+package productservice.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import product.dto.create.CreateProductRequest;
-import product.dto.get.GetProductRequest;
-import product.dto.get.GetProductResponse;
-import product.services.ProductService;
+import productservice.dto.create.CreateProductRequest;
+import productservice.dto.get.GetProductRequest;
+import productservice.dto.get.GetProductResponse;
+import productservice.services.ProductService;
 
 @RestController
 @RequestMapping("/products")

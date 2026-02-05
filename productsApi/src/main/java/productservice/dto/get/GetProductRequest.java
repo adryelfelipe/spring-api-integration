@@ -1,4 +1,4 @@
-package product.dto.get;
+package productservice.dto.get;
 
 import jakarta.validation.constraints.PositiveOrZero;
 
