@@ -1,6 +1,5 @@
 package product.model;
 
-import client.model.Client;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 

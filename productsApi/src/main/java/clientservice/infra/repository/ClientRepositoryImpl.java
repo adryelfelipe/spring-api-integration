@@ -1,8 +1,9 @@
-package client.infra.repository;
+package clientservice.infra.repository;
 
-import client.dto.get.GetClientResponse;
-import client.model.Client;
+import clientservice.Client.model.Client;
 import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 
 @Repository
 public class ClientRepositoryImpl implements ClientRepository {
@@ -19,12 +20,12 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public GetClientResponse get(Client client) {
-        // Converte o Objeto para o Dto
-        return new GetClientResponse(
-                client.getName(),
-                client.getEmail(),
-                client.getId()
-        );
+    public Optional<Client> getById(long id) {
+        return jpaClientRepository.findById(id);
+    }
+
+    @Override
+    public Optional<Client> getByEmail(String email) {
+        return jpaClientRepository.findByEmail(email);
     }
 }

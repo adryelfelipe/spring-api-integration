@@ -1,8 +1,8 @@
-package client.service;
+package clientservice.Client.service;
 
-import client.dto.create.CreateClientRequest;
-import client.dto.get.GetClientRequest;
-import client.dto.get.GetClientResponse;
+import clientservice.Client.dto.create.CreateClientRequest;
+import clientservice.Client.dto.get.GetClientRequest;
+import clientservice.Client.dto.get.GetClientResponse;
 import org.springframework.stereotype.Service;
 
 @Service

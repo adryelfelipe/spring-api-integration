@@ -1,9 +1,9 @@
-package client.controller;
+package clientservice.Client.controller;
 
-import client.dto.create.CreateClientRequest;
-import client.dto.get.GetClientRequest;
-import client.dto.get.GetClientResponse;
-import client.service.ClientService;
+import clientservice.Client.dto.create.CreateClientRequest;
+import clientservice.Client.dto.get.GetClientRequest;
+import clientservice.Client.dto.get.GetClientResponse;
+import clientservice.Client.service.ClientService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

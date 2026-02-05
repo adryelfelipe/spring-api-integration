@@ -1,4 +1,4 @@
-package client.model;
+package clientservice.Client.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -24,6 +24,10 @@ public class Client {
     @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
+    @NotBlank(message = "A senha é obrigatória")
+    @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
+    @Column(name = "password", nullable = false, length = 255)
+    private String password;
 
     public Client() {
     }
@@ -35,6 +39,14 @@ public class Client {
     }
 
     // Getters e Setters
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Long getId() {
         return id;
     }

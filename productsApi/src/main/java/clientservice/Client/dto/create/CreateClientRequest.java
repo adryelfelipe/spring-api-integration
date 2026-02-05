@@ -1,4 +1,4 @@
-package client.dto.create;
+package clientservice.Client.dto.create;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

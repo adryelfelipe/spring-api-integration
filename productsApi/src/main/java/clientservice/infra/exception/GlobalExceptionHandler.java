@@ -1,7 +1,10 @@
-package client.infra.exception;
+package clientservice.infra.exception;
 
+import clientservice.Client.exception.ClientException;
 import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -19,16 +22,40 @@ import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    // Atributos
+    private Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    // Handlers
+    @ExceptionHandler(ClientException.class)
+    public ResponseEntity<ProblemDetail> handleClientException(ClientException e, HttpServletRequest request) throws URISyntaxException {
+        logger.warn("Regra de negócio violada");
+
+        URI type = new URI("http://localhost:8080/errors/client-exception");
+        URI instance = new URI(request.getRequestURI());
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        ProblemDetail problemDetail = ProblemDetail.forStatus(status);
+        problemDetail.setType(type);
+        problemDetail.setTitle("Regras de negócio violadas");
+        problemDetail.setDetail("As regras de negócio do módulo Cliente foram violadas");
+        problemDetail.setInstance(instance);;
+
+        return ResponseEntity
+                .status(status)
+                .body(problemDetail);
+    }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ProblemDetail> handleException(HttpServletRequest httpRequest) throws URISyntaxException {
+    public ResponseEntity<ProblemDetail> handleException(Exception e, HttpServletRequest httpRequest) throws URISyntaxException {
+        logger.error("Exceção inesperada: " + e);
+
         URI type = new URI("http://localhost:8080/errors/generic-exception");
         URI instance = new URI(httpRequest.getRequestURI());
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
         ProblemDetail problemDetail = ProblemDetail.forStatus(status);
         problemDetail.setType(type);
-        problemDetail.setTitle("Generic exception");
+        problemDetail.setTitle("Exceção genérica");
         problemDetail.setInstance(instance);
 
         return ResponseEntity
