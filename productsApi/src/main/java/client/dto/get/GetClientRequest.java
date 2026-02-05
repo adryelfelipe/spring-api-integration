@@ -1,4 +1,6 @@
 package client.dto.get;
 
-public record GetClientRequest(long id) {
+import jakarta.validation.constraints.PositiveOrZero;
+
+public record GetClientRequest(@PositiveOrZero long id) {
 }
