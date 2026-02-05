@@ -14,6 +14,6 @@ public class ProductService {
 
     public GetProductResponse get(GetProductRequest request) {
         // implementar
-        return new GetProductResponse("abababa", 2, 22);
+        return new GetProductResponse("abababa", 2, 22, 5);
     }
 }

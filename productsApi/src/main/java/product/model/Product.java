@@ -21,25 +21,18 @@ public class Product {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    // Relacionamento com Client
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "client_id",
-            nullable = false,
-            referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "fk_product_client")
-    )
-    private Client client;
+    @Column(nullable = false)
+    private Long clientId;
 
     // Construtor vazio para JPA
     public Product() {
     }
 
     // Construtor
-    public Product(String name, Double price, Client client) {
+    public Product(String name, Double price, Long clientId) {
         this.name = name;
         this.price = price;
-        this.client = client;
+        this.clientId = clientId;
     }
 
     // Getters e Setters
@@ -64,10 +57,10 @@ public class Product {
         this.price = price;
     }
 
-    public Client getClient() {
-        return client;
+    public Long getClientId() {
+        return clientId;
     }
-    public void setClient(Client client) {
-        this.client = client;
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
     }
 }
