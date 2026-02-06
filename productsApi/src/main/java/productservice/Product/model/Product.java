@@ -1,4 +1,4 @@
-package productservice.model;
+package productservice.Product.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;

@@ -1,20 +1,17 @@
-package productservice.dto.get;
+package productservice.Product.dto.create;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
-public record GetProductResponse(
+public record CreateProductRequest(
         @NotBlank(message = "O nome do produto é obrigatório")
-        @Size(min = 2, max = 199, message = "O nome deve ter entre 2 e 199 caracteres")
+        @Size(min = 1, message = "O nome do produto deve ter no mínimo 1 caracter")
         String name,
 
         @PositiveOrZero(message = "O id do produto deve ser maior ou igual a 0")
         long id,
 
         @PositiveOrZero(message = "O preço do produto deve ser maior ou igual a 0")
-        double price,
-
-        @PositiveOrZero(message = "O id do cliente deve ser maior ou igual a 0")
-        long clientId
+        double price
 ) {}

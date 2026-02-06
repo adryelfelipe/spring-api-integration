@@ -1,4 +1,4 @@
-package productservice.infra.exception;
+package productservice.Product.exception;
 
 import clientservice.Auth.exception.AccessDeniedException;
 import clientservice.Client.exception.ClientException;

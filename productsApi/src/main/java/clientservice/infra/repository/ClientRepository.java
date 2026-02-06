@@ -1,4 +1,4 @@
-package clientservice.infra.repository;
+package clientservice.Infra.repository;
 
 import clientservice.Client.model.Client;
 

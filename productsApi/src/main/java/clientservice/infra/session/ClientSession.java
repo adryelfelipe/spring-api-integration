@@ -1,4 +1,4 @@
-package clientservice.infra.session;
+package clientservice.Infra.session;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;

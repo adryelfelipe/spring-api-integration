@@ -5,7 +5,7 @@ import clientservice.Client.dto.create.CreateClientRequest;
 import clientservice.Client.dto.get.GetClientRequest;
 import clientservice.Client.dto.get.GetClientResponse;
 import clientservice.Client.service.ClientService;
-import clientservice.infra.session.ClientSession;
+import clientservice.Infra.session.ClientSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

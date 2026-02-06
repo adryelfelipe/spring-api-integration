@@ -5,8 +5,8 @@ import clientservice.Auth.dto.register.ClientRegisterRequest;
 import clientservice.Client.exception.ClientEmailAlreadyUsed;
 import clientservice.Client.exception.ClientNotFoundException;
 import clientservice.Client.mapper.ClientMapper;
-import clientservice.infra.repository.ClientRepository;
-import clientservice.infra.session.ClientSession;
+import clientservice.Infra.repository.ClientRepository;
+import clientservice.Infra.session.ClientSession;
 import clientservice.Client.model.Client;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class AuthService {
         Optional<Client> optionalClient = clientRepository.getByEmail(request.email());
 
         if(optionalClient.isEmpty()) {
-            throw new ClientNotFoundException(request.email());
+            throw new ClientNotFoundException("Cliente não encontrado com o email: " + request.email());
         }
 
         Client client = optionalClient.get();

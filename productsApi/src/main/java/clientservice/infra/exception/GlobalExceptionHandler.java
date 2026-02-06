@@ -1,4 +1,4 @@
-package clientservice.infra.exception;
+package clientservice.Infra.exception;
 
 import clientservice.Auth.exception.AccessDeniedException;
 import clientservice.Client.exception.ClientException;
@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -28,6 +29,25 @@ public class GlobalExceptionHandler {
     private Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     // Handlers
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ProblemDetail> handleHttpRequestMethodNotSupportedException(HttpServletRequest httpRequest) throws URISyntaxException {
+        logger.warn("Método HTTP não suportado: " + httpRequest.getRequestURI());
+
+        URI type = new URI("http://localhost:8080/errors/method-not-allowed");
+        URI instance = new URI(httpRequest.getRequestURI());
+        HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
+
+        ProblemDetail problemDetail = ProblemDetail.forStatus(status);
+        problemDetail.setType(type);
+        problemDetail.setTitle("Método HTTP não suportado");
+        problemDetail.setDetail("O método http " + httpRequest.getMethod() + " não é suportado no caminho " + httpRequest.getRequestURI());
+        problemDetail.setInstance(instance);
+
+        return ResponseEntity
+                .status(status)
+                .body(problemDetail);
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ProblemDetail> handleAcessDeniedException(AccessDeniedException e, HttpServletRequest httpRequest) throws URISyntaxException {
         logger.warn("Acesso negado");
