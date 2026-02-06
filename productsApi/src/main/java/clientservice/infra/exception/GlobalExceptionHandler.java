@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     // Handlers
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ProblemDetail> handleHttpRequestMethodNotSupportedException(HttpServletRequest httpRequest) throws URISyntaxException {
-        logger.warn("Método HTTP não suportado: " + httpRequest.getRequestURI());
+        logger.warn("Erro ao processar a requisião, método HTTP não suportado: " + httpRequest.getRequestURI());
 
         URI type = new URI("http://localhost:8080/errors/method-not-allowed");
         URI instance = new URI(httpRequest.getRequestURI());
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ProblemDetail> handleAcessDeniedException(AccessDeniedException e, HttpServletRequest httpRequest) throws URISyntaxException {
-        logger.warn("Acesso negado");
+        logger.warn("Erro ao processar a requisião, acesso negado");
 
         URI type = new URI("http://localhost:8080/errors/acess-denied");
         URI instance = new URI(httpRequest.getRequestURI());
@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ClientException.class)
     public ResponseEntity<ProblemDetail> handleClientException(ClientException e, HttpServletRequest request) throws URISyntaxException {
-        logger.warn("Regra de negocio violada");
+        logger.warn("Erro ao processar a requisião, regra de negocio violada");
 
         URI type = new URI("http://localhost:8080/errors/client-exception");
         URI instance = new URI(request.getRequestURI());
@@ -107,6 +107,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ProblemDetail> handleHttpMessageNotReadableException (HttpServletRequest httpRequest) throws URISyntaxException {
+        logger.error("Erro ao processar a requisião, body não preenchido");
+
         URI type = new URI("http://localhost:8080/errors/empty-body");
         URI instance = new URI(httpRequest.getRequestURI());
         HttpStatus status = HttpStatus.BAD_REQUEST;
@@ -122,42 +124,45 @@ public class GlobalExceptionHandler {
                 .body(problemDetail);
         }
 
-        @ExceptionHandler(MethodArgumentNotValidException.class)
-        public ResponseEntity<ProblemDetail> handleMethodArgumentNotValidException (MethodArgumentNotValidException e, HttpServletRequest httpRequest) throws URISyntaxException {
-            URI type = new URI("http://localhost:8080/errors/invalid-output");
-            URI instance = new URI(httpRequest.getRequestURI());
-            HttpStatus status = HttpStatus.BAD_REQUEST;
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ProblemDetail> handleMethodArgumentNotValidException (MethodArgumentNotValidException e, HttpServletRequest httpRequest) throws URISyntaxException {
+        logger.error("Erro ao processar a requisião, campos violados");
 
-            BindingResult result = e.getBindingResult();
-            List<String> errors = new ArrayList<>();
-            for (FieldError fieldError : result.getFieldErrors()) {
-                errors.add("campo: " + fieldError.getField() + " | mensagem: " + fieldError.getDefaultMessage());
-            }
+        URI type = new URI("http://localhost:8080/errors/invalid-output");
+        URI instance = new URI(httpRequest.getRequestURI());
+        HttpStatus status = HttpStatus.BAD_REQUEST;
 
-            ProblemDetail response = ProblemDetail.forStatus(status);
-            response.setType(type);
-            response.setTitle("Requisição inválida");
-            response.setDetail("A requisição contém campos inválidos ou obrigatórios ausentes");
-            response.setProperty("erros", errors);
-            response.setInstance(instance);
-
-            return ResponseEntity
-                    .status(status)
-                    .body(response);
+        BindingResult result = e.getBindingResult();
+        List<String> errors = new ArrayList<>();
+        for (FieldError fieldError : result.getFieldErrors()) {
+            errors.add("campo: " + fieldError.getField() + " | mensagem: " + fieldError.getDefaultMessage());
         }
 
-        @ExceptionHandler(FeignException.class)
-        public ResponseEntity<String> handleFeignException (FeignException e){
+        ProblemDetail response = ProblemDetail.forStatus(status);
+        response.setType(type);
+        response.setTitle("Requisição inválida");
+        response.setDetail("A requisição contém campos inválidos ou obrigatórios ausentes");
+        response.setProperty("erros", errors);
+        response.setInstance(instance);
 
-            return ResponseEntity
-                    .status(e.status())
-                    .body(e.contentUTF8());
-        }
+        return ResponseEntity
+                .status(status)
+                .body(response);
+    }
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<String> handleFeignException (FeignException e){
+        logger.error("Erro durante o processamento da requisição por parte do servidor solicitado");
+
+        return ResponseEntity
+                .status(e.status())
+                .body(e.contentUTF8());
+    }
 
     // Handlers
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ProblemDetail> handleNoResourceFoundException(HttpServletRequest httpRequest) throws URISyntaxException {
-        logger.warn("Recurso não encontrado");
+        logger.warn("Erro durante o processamento da requisição, recurso não encontrado");
 
         URI type = new URI("http://localhost:8081/errors/resource-not-found");
         URI instance = new URI(httpRequest.getRequestURI());
@@ -172,4 +177,4 @@ public class GlobalExceptionHandler {
                 .status(status)
                 .body(problemDetail);
     }
-    }
+}
