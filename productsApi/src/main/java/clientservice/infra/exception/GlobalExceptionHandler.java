@@ -15,6 +15,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -132,4 +133,23 @@ public class GlobalExceptionHandler {
                     .status(e.status())
                     .body(e.contentUTF8());
         }
+
+    // Handlers
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ProblemDetail> handleNoResourceFoundException(HttpServletRequest httpRequest) throws URISyntaxException {
+        logger.warn("Recurso não encontrado");
+
+        URI type = new URI("http://localhost:8081/errors/resource-not-found");
+        URI instance = new URI(httpRequest.getRequestURI());
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
+        ProblemDetail problemDetail = ProblemDetail.forStatus(status);
+        problemDetail.setType(type);
+        problemDetail.setTitle("Recurso não encontrado");
+        problemDetail.setInstance(instance);
+
+        return ResponseEntity
+                .status(status)
+                .body(problemDetail);
+    }
     }

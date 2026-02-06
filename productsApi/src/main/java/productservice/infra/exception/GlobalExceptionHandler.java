@@ -15,6 +15,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -26,11 +28,29 @@ public class GlobalExceptionHandler {
     private Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     // Handlers
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ProblemDetail> handleNoResourceFoundException(HttpServletRequest httpRequest) throws URISyntaxException {
+        logger.warn("Recurso não encontrado");
+
+        URI type = new URI("http://localhost:8081/errors/resource-not-found");
+        URI instance = new URI(httpRequest.getRequestURI());
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
+        ProblemDetail problemDetail = ProblemDetail.forStatus(status);
+        problemDetail.setType(type);
+        problemDetail.setTitle("Recurso não encontrado");
+        problemDetail.setInstance(instance);
+
+        return ResponseEntity
+                .status(status)
+                .body(problemDetail);
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ProblemDetail> handleAcessDeniedException(AccessDeniedException e, HttpServletRequest httpRequest) throws URISyntaxException {
         logger.warn("Acesso negado");
 
-        URI type = new URI("http://localhost:8080/errors/acess-denied");
+        URI type = new URI("http://localhost:8081/errors/acess-denied");
         URI instance = new URI(httpRequest.getRequestURI());
         HttpStatus status = HttpStatus.FORBIDDEN;
 
@@ -49,7 +69,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ProblemDetail> handleClientException(ClientException e, HttpServletRequest request) throws URISyntaxException {
         logger.warn("Regra de negócio violada");
 
-        URI type = new URI("http://localhost:8080/errors/client-exception");
+        URI type = new URI("http://localhost:8081/errors/client-exception");
         URI instance = new URI(request.getRequestURI());
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
@@ -67,7 +87,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ProblemDetail> handleException(Exception e, HttpServletRequest httpRequest) throws URISyntaxException {
         logger.error("Exceção inesperada: " + e);
 
-        URI type = new URI("http://localhost:8080/errors/generic-exception");
+        URI type = new URI("http://localhost:8081/errors/generic-exception");
         URI instance = new URI(httpRequest.getRequestURI());
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
@@ -84,7 +104,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ProblemDetail> handleHttpMessageNotReadableException (HttpServletRequest httpRequest) throws URISyntaxException {
-        URI type = new URI("http://localhost:8080/errors/empty-body");
+        URI type = new URI("http://localhost:8081/errors/empty-body");
         URI instance = new URI(httpRequest.getRequestURI());
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
@@ -101,7 +121,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ProblemDetail> handleMethodArgumentNotValidException (MethodArgumentNotValidException e, HttpServletRequest httpRequest) throws URISyntaxException {
-        URI type = new URI("http://localhost:8080/errors/invalid-output");
+        URI type = new URI("http://localhost:8081/errors/invalid-output");
         URI instance = new URI(httpRequest.getRequestURI());
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
