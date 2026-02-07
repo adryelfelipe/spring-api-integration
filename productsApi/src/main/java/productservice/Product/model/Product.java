@@ -28,7 +28,8 @@ public class Product {
     }
 
     // Construtor
-    public Product(String name, Double price, Long clientId) {
+    public Product(Long id, String name, Double price, Long clientId) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.clientId = clientId;

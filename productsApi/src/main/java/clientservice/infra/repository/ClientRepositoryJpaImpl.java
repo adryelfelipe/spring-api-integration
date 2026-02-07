@@ -6,11 +6,11 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class ClientRepositoryImpl implements ClientRepository {
+public class ClientRepositoryJpaImpl implements ClientRepository {
 
     private final JpaClientRepository jpaClientRepository;
 
-    public ClientRepositoryImpl(JpaClientRepository jpaClientRepository) {
+    public ClientRepositoryJpaImpl(JpaClientRepository jpaClientRepository) {
         this.jpaClientRepository = jpaClientRepository;
     }
 

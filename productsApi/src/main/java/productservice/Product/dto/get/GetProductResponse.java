@@ -10,11 +10,11 @@ public record GetProductResponse(
         String name,
 
         @PositiveOrZero(message = "O id do produto deve ser maior ou igual a 0")
-        long id,
+        Long id,
 
         @PositiveOrZero(message = "O preço do produto deve ser maior ou igual a 0")
-        double price,
+        Double price,
 
         @PositiveOrZero(message = "O id do cliente deve ser maior ou igual a 0")
-        long clientId
+        Long clientId
 ) {}

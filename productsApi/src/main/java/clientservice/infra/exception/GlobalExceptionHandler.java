@@ -17,6 +17,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import productservice.Product.exceptions.ProductException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -72,6 +73,25 @@ public class GlobalExceptionHandler {
         logger.warn("Erro ao processar a requisião, regra de negocio violada");
 
         URI type = new URI("http://localhost:8080/errors/client-exception");
+        URI instance = new URI(request.getRequestURI());
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        ProblemDetail problemDetail = ProblemDetail.forStatus(status);
+        problemDetail.setType(type);
+        problemDetail.setTitle("Regras de negócio violadas");
+        problemDetail.setDetail(e.getMessage());
+        problemDetail.setInstance(instance);;
+
+        return ResponseEntity
+                .status(status)
+                .body(problemDetail);
+    }
+
+    @ExceptionHandler(ProductException.class)
+    public ResponseEntity<ProblemDetail> handleProductException(ProductException e, HttpServletRequest request) throws URISyntaxException {
+        logger.warn("Erro ao processar a requisião, regra de negocio em Product violada");
+
+        URI type = new URI("http://localhost:8080/errors/product-exception");
         URI instance = new URI(request.getRequestURI());
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
