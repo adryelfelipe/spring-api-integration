@@ -3,6 +3,7 @@ package clientservice.Auth.controller;
 import clientservice.Auth.dto.login.ClientLoginRequest;
 import clientservice.Auth.dto.register.ClientRegisterRequest;
 import clientservice.Auth.service.AuthService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,8 @@ public class AuthController {
 
     // Métodos
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid ClientLoginRequest request) {
-        String productServiceSessionId = authService.login(request);
+    public ResponseEntity<String> login(@RequestBody @Valid ClientLoginRequest request, HttpSession httpSession) {
+        String productServiceSessionId = authService.login(request, httpSession.getId());
 
         return ResponseEntity.ok().body(productServiceSessionId);
     }

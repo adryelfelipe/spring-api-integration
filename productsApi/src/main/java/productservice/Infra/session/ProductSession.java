@@ -5,10 +5,11 @@ import org.springframework.web.context.annotation.SessionScope;
 
 @Component
 @SessionScope
-public class ClientSession {
+public class ProductSession {
     // Atributos
     private boolean logged;
     private Long clientId;
+    private String client_service_sessionId;
 
     // Getters and Setters
     public boolean isLogged() {
@@ -25,5 +26,13 @@ public class ClientSession {
 
     public void setClientId(Long clientId) {
         this.clientId = clientId;
+    }
+
+    public String getClient_service_sessionId() {
+        return client_service_sessionId;
+    }
+
+    public void setClient_service_sessionId(String client_service_sessionId) {
+        this.client_service_sessionId = client_service_sessionId;
     }
 }

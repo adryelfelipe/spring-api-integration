@@ -2,10 +2,7 @@ package productservice.Auth.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import productservice.Auth.service.AuthService;
 
 @RestController
@@ -21,8 +18,8 @@ public class AuthController {
 
     // Endpoints
     @PostMapping()
-    public ResponseEntity<String> authenticate(@RequestParam String password,@RequestParam Long clientId ,HttpSession session) {
-        authService.authenticate(password, clientId);
+    public ResponseEntity<String> authenticate(@RequestParam String password, @RequestParam Long clientId, @RequestHeader("Cookie") String client_service_sessionId, HttpSession session) {
+        authService.authenticate(password, clientId, client_service_sessionId);
 
         return ResponseEntity.ok().body(session.getId());
     }
