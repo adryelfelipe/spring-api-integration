@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import productservice.Product.dto.create.CreateProductRequest;
 import productservice.Product.dto.get.GetProductRequest;
 import productservice.Product.dto.get.GetProductResponse;
-import productservice.Product.services.ProductService;
+import productservice.Product.service.ProductService;
 
 @RestController
 @RequestMapping("/products")

@@ -21,8 +21,8 @@ public class AuthController {
 
     // Endpoints
     @PostMapping()
-    public ResponseEntity<String> authenticate(@RequestParam String password, HttpSession session) {
-        authService.authenticate(password);
+    public ResponseEntity<String> authenticate(@RequestParam String password,@RequestParam Long clientId ,HttpSession session) {
+        authService.authenticate(password, clientId);
 
         return ResponseEntity.ok().body(session.getId());
     }

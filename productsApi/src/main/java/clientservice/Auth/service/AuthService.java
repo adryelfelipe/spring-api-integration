@@ -41,8 +41,7 @@ public class AuthService {
 
         if(client.getPassword().equals(request.password())) {
             clientSession.setLogged(true);
-
-            return productFeignClient.authenticate("123");
+            return productFeignClient.authenticate("123", client.getId());
         } else {
             throw new InvalidCredentialsException();
         }

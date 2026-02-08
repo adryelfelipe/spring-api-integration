@@ -17,7 +17,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-import productservice.Product.exceptions.ProductException;
+import productservice.Product.exception.ProductException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -145,16 +145,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ProblemDetail> handleHttpMessageNotReadableException (HttpServletRequest httpRequest) throws URISyntaxException {
-        logger.error("Erro ao processar a requisião, body não preenchido");
+        logger.error("Erro ao processar a requisião, body inválido");
 
-        URI type = new URI("http://localhost:8080/errors/empty-body");
+        URI type = new URI("http://localhost:8080/errors/invalid-body");
         URI instance = new URI(httpRequest.getRequestURI());
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
         ProblemDetail problemDetail = ProblemDetail.forStatus(status);
         problemDetail.setType(type);
         problemDetail.setTitle("Requisição inválida");
-        problemDetail.setDetail("A requisição deve conter o body corretamento preenchido");
+        problemDetail.setDetail("A requisição deve conter o body corretamente preenchido");
         problemDetail.setInstance(instance);
 
         return ResponseEntity

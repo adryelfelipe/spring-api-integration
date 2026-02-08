@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface ProductFeignClient {
 
     @PostMapping("/auth")
-    String authenticate(@RequestParam String password);
+    String authenticate(@RequestParam String password, @RequestParam Long clientId);
 }

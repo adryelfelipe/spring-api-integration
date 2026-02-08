@@ -1,4 +1,4 @@
-package productservice.Product.exceptions;
+package productservice.Product.exception;
 
 public class ProductException extends RuntimeException {
     public ProductException(String message) {
