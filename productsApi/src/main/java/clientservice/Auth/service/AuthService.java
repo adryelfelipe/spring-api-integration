@@ -5,6 +5,7 @@ import clientservice.Auth.dto.register.ClientRegisterRequest;
 import clientservice.Client.exception.ClientEmailAlreadyUsed;
 import clientservice.Client.exception.ClientNotFoundException;
 import clientservice.Client.mapper.ClientMapper;
+import clientservice.Infra.feign.ProductFeignClient;
 import clientservice.Infra.repository.ClientRepository;
 import clientservice.Infra.session.ClientSession;
 import clientservice.Client.model.Client;
@@ -18,16 +19,18 @@ public class AuthService {
     private ClientSession clientSession;
     private ClientRepository clientRepository;
     private ClientMapper clientMapper;
+    private ProductFeignClient productFeignClient;
 
     // Construtor
-    public AuthService(ClientSession clientSession, ClientRepository clientRepository, ClientMapper clientMapper) {
+    public AuthService(ClientSession clientSession, ClientRepository clientRepository, ClientMapper clientMapper, ProductFeignClient productFeignClient) {
         this.clientSession = clientSession;
         this.clientRepository = clientRepository;
         this.clientMapper = clientMapper;
+        this.productFeignClient = productFeignClient;
     }
 
     // Métodos
-    public void login(ClientLoginRequest request) {
+    public String login(ClientLoginRequest request) {
         Optional<Client> optionalClient = clientRepository.getByEmail(request.email());
 
         if(optionalClient.isEmpty()) {
@@ -39,7 +42,11 @@ public class AuthService {
         if(client.getPassword().equals(request.password())) {
             clientSession.setId(client.getId());
             clientSession.setName(client.getName());
+
+            return productFeignClient.authenticate("123");
         }
+
+        return "";
     }
 
     public void register(ClientRegisterRequest request) {

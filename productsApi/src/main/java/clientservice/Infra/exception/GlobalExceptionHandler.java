@@ -49,6 +49,24 @@ public class GlobalExceptionHandler {
                 .body(problemDetail);
     }
 
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ProblemDetail> handleFeignException(FeignException e, HttpServletRequest httpRequest) {
+        logger.warn("Ocorreu um erro ao se comunicar com um sistema externo: " + e.request().url() + " " + e.getMessage());
+
+        URI type = URI.create("http://localhost:8080/errors/external-server");
+        URI instance = URI.create(httpRequest.getRequestURI());
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        ProblemDetail problemDetail = ProblemDetail.forStatus(status);
+        problemDetail.setType(type);
+        problemDetail.setTitle("Erro ao se comunicar com sistema externo");
+        problemDetail.setInstance(instance);
+
+        return ResponseEntity
+                .status(status)
+                .body(problemDetail);
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ProblemDetail> handleAcessDeniedException(AccessDeniedException e, HttpServletRequest httpRequest) throws URISyntaxException {
         logger.warn("Erro ao processar a requisião, acesso negado");
@@ -168,15 +186,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(status)
                 .body(response);
-    }
-
-    @ExceptionHandler(FeignException.class)
-    public ResponseEntity<String> handleFeignException (FeignException e){
-        logger.error("Erro durante o processamento da requisição por parte do servidor solicitado");
-
-        return ResponseEntity
-                .status(e.status())
-                .body(e.contentUTF8());
     }
 
     // Handlers

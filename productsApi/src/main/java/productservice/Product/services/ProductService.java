@@ -3,6 +3,8 @@ package productservice.Product.services;
 import clientservice.Auth.exception.AccessDeniedException;
 import clientservice.Infra.session.ClientSession;
 import org.springframework.stereotype.Service;
+import productservice.Auth.exception.AcessDeniedException;
+import productservice.Infra.session.AuthSession;
 import productservice.Product.dto.create.CreateProductRequest;
 import productservice.Product.dto.get.GetProductRequest;
 import productservice.Product.dto.get.GetProductResponse;
@@ -16,29 +18,29 @@ import java.util.Optional;
 @Service
 public class ProductService {
     // Atributos
-    private ClientSession clientSession;
+    private AuthSession authSession;
     private ProductRepository productRepository;
     private ProductMapper productMapper;
 
     // Construtor
-    public ProductService(ClientSession clientSession, ProductRepository productRepository, ProductMapper productMapper) {
-        this.clientSession = clientSession;
+    public ProductService(AuthSession authSession, ProductRepository productRepository, ProductMapper productMapper) {
+        this.authSession = authSession;
         this.productRepository = productRepository;
         this.productMapper = productMapper;
     }
 
     // Métodos
     public void create(CreateProductRequest request) {
-        if(clientSession.getName().isEmpty()) {
-            throw new AccessDeniedException();
+        if(!authSession.isLogged()) {
+            throw new AcessDeniedException();
         }
 
         // implementar
     }
 
     public GetProductResponse get(GetProductRequest request) {
-        if(clientSession.getName().isEmpty()) {
-            throw new AccessDeniedException();
+        if(!authSession.isLogged()) {
+            throw new AcessDeniedException()    ;
         }
 
         Optional<Product> optionalProduct = productRepository.getById(request.id());

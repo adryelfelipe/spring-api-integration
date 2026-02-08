@@ -21,10 +21,10 @@ public class AuthController {
 
     // Métodos
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody @Valid ClientLoginRequest request) {
-        authService.login(request);
+    public ResponseEntity<String> login(@RequestBody @Valid ClientLoginRequest request) {
+        String productServiceSessionId = authService.login(request);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(productServiceSessionId);
     }
 
     @PostMapping("/register")
