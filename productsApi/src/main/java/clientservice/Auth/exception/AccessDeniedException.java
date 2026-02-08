@@ -1,7 +1,7 @@
 package clientservice.Auth.exception;
 
-public class AccessDeniedException extends RuntimeException {
+public class AccessDeniedException extends AuthException {
     public AccessDeniedException() {
-        super("Acess denied.");
+        super("Acesso negado");
     }
 }

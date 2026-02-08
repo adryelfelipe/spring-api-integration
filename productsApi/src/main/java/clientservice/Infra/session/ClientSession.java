@@ -9,23 +9,14 @@ import java.util.Optional;
 @SessionScope
 public class ClientSession {
     // Atributos
-    private String name;
-    private Long id;
+    private boolean logged;
 
     // Getters and Setters
-    public Optional<Long> getId() {
-        return Optional.ofNullable(id);
+    public boolean isLogged() {
+        return logged;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Optional<String> getName() {
-        return Optional.ofNullable(name);
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setLogged(boolean logged) {
+        this.logged = logged;
     }
 }

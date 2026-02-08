@@ -1,6 +1,6 @@
 package clientservice.Infra.exception;
 
-import clientservice.Auth.exception.AccessDeniedException;
+import clientservice.Auth.exception.AuthException;
 import clientservice.Client.exception.ClientException;
 import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -67,18 +67,18 @@ public class GlobalExceptionHandler {
                 .body(problemDetail);
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ProblemDetail> handleAcessDeniedException(AccessDeniedException e, HttpServletRequest httpRequest) throws URISyntaxException {
-        logger.warn("Erro ao processar a requisião, acesso negado");
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<ProblemDetail> handleAuthException(AuthException e, HttpServletRequest httpRequest) throws URISyntaxException {
+        logger.warn("Erro ao processar a requisião, falha na autenticação");
 
-        URI type = new URI("http://localhost:8080/errors/acess-denied");
+        URI type = new URI("http://localhost:8080/errors/authentication");
         URI instance = new URI(httpRequest.getRequestURI());
         HttpStatus status = HttpStatus.FORBIDDEN;
 
         ProblemDetail problemDetail = ProblemDetail.forStatus(status);
         problemDetail.setType(type);
-        problemDetail.setTitle("Regra de autorização violada");
-        problemDetail.setDetail("Você não tem permissão para executar esta ação");
+        problemDetail.setTitle("Regra de autenticação violada");
+        problemDetail.setDetail(e.getMessage());
         problemDetail.setInstance(instance);;
 
         return ResponseEntity

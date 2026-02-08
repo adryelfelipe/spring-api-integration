@@ -2,8 +2,8 @@ package clientservice.Auth.service;
 
 import clientservice.Auth.dto.login.ClientLoginRequest;
 import clientservice.Auth.dto.register.ClientRegisterRequest;
+import clientservice.Auth.exception.InvalidCredentialsException;
 import clientservice.Client.exception.ClientEmailAlreadyUsed;
-import clientservice.Client.exception.ClientNotFoundException;
 import clientservice.Client.mapper.ClientMapper;
 import clientservice.Infra.feign.ProductFeignClient;
 import clientservice.Infra.repository.ClientRepository;
@@ -34,19 +34,18 @@ public class AuthService {
         Optional<Client> optionalClient = clientRepository.getByEmail(request.email());
 
         if(optionalClient.isEmpty()) {
-            throw new ClientNotFoundException("Cliente não encontrado com o email: " + request.email());
+            throw new InvalidCredentialsException();
         }
 
         Client client = optionalClient.get();
 
         if(client.getPassword().equals(request.password())) {
-            clientSession.setId(client.getId());
-            clientSession.setName(client.getName());
+            clientSession.setLogged(true);
 
             return productFeignClient.authenticate("123");
+        } else {
+            throw new InvalidCredentialsException();
         }
-
-        return "";
     }
 
     public void register(ClientRegisterRequest request) {

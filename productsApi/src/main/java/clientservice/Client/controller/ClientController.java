@@ -27,7 +27,7 @@ public class ClientController {
     // Métodos
     @PostMapping()
     public ResponseEntity<Void> create(@RequestBody @Valid CreateClientRequest request) {
-        if(clientSession.getName().isEmpty()) {
+        if(!clientSession.isLogged()) {
             throw new AccessDeniedException();
         }
 
@@ -40,7 +40,7 @@ public class ClientController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GetClientResponse> getById(GetClientRequest request) {
-        if(clientSession.getName().isEmpty()) {
+        if(!clientSession.isLogged()) {
             throw new AccessDeniedException();
         }
 
