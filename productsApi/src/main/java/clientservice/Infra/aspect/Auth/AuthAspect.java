@@ -1,14 +1,16 @@
-package clientservice.Infra.aspect;
+package clientservice.Infra.aspect.Auth;
 
 import clientservice.Auth.exception.AccessDeniedException;
 import clientservice.Infra.session.ClientSession;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
+@Order(1)
 public class AuthAspect {
     // Atributos
     public ClientSession clientSession;
