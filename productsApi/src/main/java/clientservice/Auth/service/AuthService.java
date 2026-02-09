@@ -10,7 +10,10 @@ import clientservice.Infra.repository.ClientRepository;
 import clientservice.Infra.session.ClientSession;
 import clientservice.Client.model.Client;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import productservice.Auth.controller.AuthController;
 
 import java.util.Optional;
 
@@ -21,6 +24,7 @@ public class AuthService {
     private ClientRepository clientRepository;
     private ClientMapper clientMapper;
     private ClientFeignClient clientFeignClient;
+    private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     // Construtor
     public AuthService(ClientSession clientSession, ClientRepository clientRepository, ClientMapper clientMapper, ClientFeignClient clientFeignClient) {
@@ -42,6 +46,8 @@ public class AuthService {
 
         if(client.getPassword().equals(request.password())) {
             clientSession.setLogged(true);
+            logger.info("Usuário de ID {} autenticado com sucesso", client.getId());
+
             return clientFeignClient.authenticate("123", client.getId(), service_sessionId);
         } else {
             throw new InvalidCredentialsException();
@@ -57,5 +63,6 @@ public class AuthService {
 
         Client client = clientMapper.toEntity(request);
         clientRepository.save(client);
+        logger.info("Usuário de ID {} registrado com sucesso", client.getId());
     }
 }
