@@ -3,6 +3,7 @@ package productservice.Product.service;
 import clientservice.Client.dto.get.GetClientResponse;
 import org.springframework.stereotype.Service;
 import productservice.Infra.aspect.auth.ToAuthenticate;
+import productservice.Infra.aspect.logging.ToLog;
 import productservice.Infra.feign.ProductFeignClient;
 import productservice.Infra.session.ProductSession;
 import productservice.Product.dto.create.CreateProductRequest;
@@ -33,12 +34,14 @@ public class ProductService {
 
     // Métodos
     @ToAuthenticate
+    @ToLog
     public void create(CreateProductRequest request) {
         Product product = productMapper.toEntity(request);
         productRepository.save(product);
     }
 
     @ToAuthenticate
+    @ToLog
     public GetProductResponse get(GetProductRequest request) {
         Optional<Product> optionalProduct = productRepository.getById(request.id());
 
