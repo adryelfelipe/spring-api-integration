@@ -2,7 +2,7 @@ package productservice.Product.service;
 
 import clientservice.Client.dto.get.GetClientResponse;
 import org.springframework.stereotype.Service;
-import productservice.Auth.exception.AcessDeniedException;
+import productservice.Infra.aspect.auth.ToAuthenticate;
 import productservice.Infra.feign.ProductFeignClient;
 import productservice.Infra.session.ProductSession;
 import productservice.Product.dto.create.CreateProductRequest;
@@ -32,20 +32,14 @@ public class ProductService {
     }
 
     // Métodos
+    @ToAuthenticate
     public void create(CreateProductRequest request) {
-        if(!productSession.isLogged()) {
-            throw new AcessDeniedException();
-        }
-
         Product product = productMapper.toEntity(request);
         productRepository.save(product);
     }
 
+    @ToAuthenticate
     public GetProductResponse get(GetProductRequest request) {
-        if(!productSession.isLogged()) {
-            throw new AcessDeniedException()    ;
-        }
-
         Optional<Product> optionalProduct = productRepository.getById(request.id());
 
         if(optionalProduct.isEmpty()) {

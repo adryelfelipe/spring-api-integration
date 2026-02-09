@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import productservice.Infra.aspect.auth.ToAuthenticate;
 import productservice.Product.dto.create.CreateProductRequest;
 import productservice.Product.dto.get.GetProductRequest;
 import productservice.Product.dto.get.GetProductResponse;
