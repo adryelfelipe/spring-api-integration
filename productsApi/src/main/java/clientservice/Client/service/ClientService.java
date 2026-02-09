@@ -6,9 +6,9 @@ import clientservice.Client.dto.get.GetClientResponse;
 import clientservice.Client.exception.ClientNotFoundException;
 import clientservice.Client.mapper.ClientMapper;
 import clientservice.Client.model.Client;
+import clientservice.Infra.aspect.ToAuthenticate;
 import clientservice.Infra.repository.ClientRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -24,11 +24,13 @@ public class ClientService {
     }
 
     // Métodos
+    @ToAuthenticate
     public void create(CreateClientRequest request) {
         Client client = clientMapper.toEntity(request);
         clientRepository.save(client);
     }
 
+    @ToAuthenticate
     public GetClientResponse get(GetClientRequest request) {
         Optional<Client> optionalClient = clientRepository.getById(request.id());
 

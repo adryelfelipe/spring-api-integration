@@ -27,10 +27,6 @@ public class ClientController {
     // Métodos
     @PostMapping()
     public ResponseEntity<Void> create(@RequestBody @Valid CreateClientRequest request) {
-        if(!clientSession.isLogged()) {
-            throw new AccessDeniedException();
-        }
-
         clientService.create(request);
 
         return ResponseEntity
@@ -40,10 +36,6 @@ public class ClientController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GetClientResponse> getById(GetClientRequest request) {
-        if(!clientSession.isLogged()) {
-            throw new AccessDeniedException();
-        }
-
         GetClientResponse response = clientService.get(request);
 
         return ResponseEntity.ok(response);
